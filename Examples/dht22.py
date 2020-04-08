@@ -4,7 +4,7 @@ import time
 
 # Parse command line parameters.
 pin = 4
-sensor = Adafruit_DHT.DHT22
+sensor = Adafruit_DHT.DHT11
 
 while True:
 

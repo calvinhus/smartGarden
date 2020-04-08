@@ -29,7 +29,8 @@ spi = spidev.SpiDev()
 spi.open(0,0)
 spi.max_speed_hz=1000000
 
-dh22_sensor = Adafruit_DHT.DHT22
+#dh22_sensor = Adafruit_DHT.DHT22
+DHT11_sensor = Adafruit_DHT.DHT11
 
 pin = 4 #DHT22 data pin on the raspberry pi
 
@@ -66,10 +67,11 @@ app = Flask(__name__)
 def index():
 
     try: #check to see if the DHT sensor is connected
-        humidity, temperature = Adafruit_DHT.read(dh22_sensor, pin) #get the values from the sensor
+        humidity, temperature = Adafruit_DHT.read(DHT11_sensor, pin) #get the values from the sensor
         humidity ='{:.2f}'.format(humidity) #convert value to two decimal places
         temperature ='{:.1f}'.format(temperature) #convert value to one decimal place
-
+        print(temperature)
+        print("somethig")
     except: # If the sensor is not connected send null values
         humidity = 0
         temperature = 0
