@@ -10,8 +10,8 @@
 
 <style>
 body {background-color: #778899;}
-h1,p   {color: #F5F5F5;}
-.gauge {color: yellow;}
+h1  {color: #3CB371;}
+p   {color: #F5F5F5;}
 </style>
 
 </head>
@@ -61,7 +61,7 @@ h1,p   {color: #F5F5F5;}
                   var gauge4 = new JustGage({
                     id: "gauge4",
                     value: 2, <!-- {{temperature}},-->
-                    levelColors: ['#58D68D', '#F4D03F', '#EC7063'],
+                    levelColors: ['#EC7063', '#F4D03F', '#58D68D'],
                     symbol: '\u2103',
                     min: 0,
                     decimals: 1,
@@ -97,7 +97,7 @@ h1,p   {color: #F5F5F5;}
                     var gauge6 = new JustGage({
                       id: "gauge6",
                       value: {{battery}},
-                      levelColors: ['#58D68D', '#F4D03F', '#EC7063'],
+                      levelColors: ['#EC7063', '#F4D03F', '#58D68D'],
                       symbol: "%",
                       min: 0,
                       max: 100,
