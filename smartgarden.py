@@ -1,42 +1,35 @@
 #!/usr/bin/python3
-#    Copyright (C) 2018  Chris Rush
-#
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU General Public License as published by
-#    the Free Software Foundation, either version 3 of the License, or
-#    (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU General Public License for more details.
-#
-#    You should have received a copy of the GNU General Public License
-#    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import smbus
-import Adafruit_DHT # this library works for DHT11 DHT22 and AM2302 sensors
+import Adafruit_DHT
 import time
 import spidev
-
-from pijuice import PiJuice # Import pijuice module now using python 3 only
-from flask import Flask, render_template
-
-pijuice = PiJuice(1, 0x14) # Initiate PiJuice interface object
-
+import RPi.GPIO as GPIO
+from flask import Flask, render_template, request
 
 # Open SPI bus
 spi = spidev.SpiDev()
 spi.open(0,0)
 spi.max_speed_hz=1000000
 
-#dh22_sensor = Adafruit_DHT.DHT22
-DHT11_sensor = Adafruit_DHT.DHT11
+DHT22_sensor = Adafruit_DHT.DHT22
 
 pin = 4 #DHT22 data pin on the raspberry pi
+
+# GPIO pins setup
+GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False)
 
 # Define sensor channels
 light_channel = 0
 temp_channel  = 1
+
+#define water pump GPIO | using a LED for testing purposes
+led = 23
+#initialize water pump status
+ledSts = 0
+# define as output and turn off
+GPIO.setup(led, GPIO.OUT)
+GPIO.output(led, GPIO.LOW)
 
 def ReadChannel(channel):
   adc = spi.xfer2([1,(8+channel)<<4,0])
@@ -67,7 +60,7 @@ app = Flask(__name__)
 def index():
 
     try: #check to see if the DHT sensor is connected
-        humidity, temperature = Adafruit_DHT.read(DHT11_sensor, pin) #get the values from the sensor
+        humidity, temperature = Adafruit_DHT.read(DHT22_sensor, pin) #get the values from the sensor
         humidity ='{:.2f}'.format(humidity) #convert value to two decimal places
         temperature ='{:.1f}'.format(temperature) #convert value to one decimal place
         print(temperature)
@@ -93,31 +86,40 @@ def index():
         pass
 
     try:
-        battery = pijuice.status.GetChargeLevel()["data"]
-        status = pijuice.status.GetStatus()["data"]
-        power = status["powerInput"]
-        charge = status["battery"]
+        # Read water pump status
+        ledSts = GPIO.input(led)
     except:
-        battery = 0
-        power = "Error"
-        charge = "Error"
+        ledSts = 0
         pass
-
-
-
 
 
     #variables to pass through to the web page
     templateData = {
+            'title': 'Smart Garden',
             'humidity' : humidity,
             'temperature' : temperature,
             'light' : light_level,
             'temp' : temp,
-            'battery' : battery,
-            'power' : power,
-            'charge' : charge
+            'led': ledSts
     }
     return render_template('index.html', **templateData) #when a html request has been made return these values
+
+@app.route("/<deviceName>/<action>")
+def action(deviceName, action):
+        #if deviceName == 'led':
+        #        actuator = led
+
+        if action == "on":
+                GPIO.output(led, GPIO.HIGH)
+        if action == "off":
+                GPIO.output(led, GPIO.LOW)
+
+        ledSts = GPIO.input(led)
+
+        templateData = {
+              'led'  : ledSts
+        }
+        return render_template('index.html', **templateData)
 
 
 if __name__ == '__main__':
