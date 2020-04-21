@@ -6,7 +6,8 @@
 <html>
 <head>
 
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}"">
+<!--<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/style.css')}}">-->
+<link rel="stylesheet" href="../static/css/style.css/">
 
 <style>
 body {background-color: #778899;}
@@ -21,6 +22,18 @@ p   {color: #F5F5F5;}
     <h1 style="margin-left: 220px; margin-top: 50px"> Smart Garden </h1>
 <div id="wrapper">
 <!--  <h1>Light & TMP36</h1> -->
+
+        <div>
+            <h2> Actuator Status & Control </h2>
+            <h3> Water Pump :  {{ led  }}  =>
+                    {% if  led   == 1 %}
+                            <a href="/led/off"class="button">TURN OFF</a>
+                    {% else %}
+                            <a href="/led/on" class="button">TURN ON</a>
+                    {% endif %}
+            </h3>
+        </div>
+
     <div class="block">
       <div id="gauge1" class="gauge">
         <script>
@@ -89,16 +102,6 @@ p   {color: #F5F5F5;}
         </div>
 
         <div>
-            <h2> Actuator Status & Control </h2>
-            <h3> Water Pump ==>  {{ led  }}  ==>
-                    {% if  led   == 1 %}
-                            <a href="/led/off"class="button">TURN OFF</a>
-                    {% else %}
-                            <a href="/led/on" class="button">TURN ON</a>
-                    {% endif %}
-            </h3>
-        </div>
-        
   </div>
 
 </body>

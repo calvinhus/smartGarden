@@ -1,6 +1,6 @@
 # Smart Garden with Raspberry Pi Zero W
 
-After the application is running (*python3 weather.py*) access it through **http://piIpAddress:5000**
+After the application is running (*python3 smartGarden.py*) access it through **http://piIpAddress:5000**
 
-![Smart Garden screenshot](/images/webPageGarden.png)
+![Smart Garden screenshot](/images/smartGarden.png)
 

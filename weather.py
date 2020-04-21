@@ -60,7 +60,7 @@ if x["cod"] != "404":
     print(" Humidity = " + str(current_humidiy) + " %\n")
     print(" Description = " + str(weather_description) + "\n")
 
-    #print(x)
+    print(x)
   
 else: 
     print(" City Not Found ")
