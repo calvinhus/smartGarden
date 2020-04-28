@@ -1,5 +1,5 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="refresh" content="30" -->
+<meta http-equiv="refresh" content="30">
 
 <script src="{{url_for('static', filename='javascript/justgage.js')}}"></script>
 <script src="{{url_for('static', filename='javascript/raphael-2.1.4.min.js')}}"></script>
@@ -21,15 +21,12 @@ p   {color: #F5F5F5;}
 
     <h1 style="margin-left: 220px; margin-top: 50px"> Smart Garden </h1>
 <div id="wrapper">
-<!--  <h1>Light & TMP36</h1> -->
-
         <div>
-            <h2> Actuator Status & Control </h2>
-            <h3> Water Pump :  {{ led  }}  =>
-                    {% if  led   == 1 %}
-                            <a href="/led/off"class="button">TURN OFF</a>
+            <h3> Bomba água :  {{ pump  }}  =>
+                    {% if  pump   == 1 %}
+                            <a href="/pump/off"class="button">TURN OFF</a>
                     {% else %}
-                            <a href="/led/on" class="button">TURN ON</a>
+                            <a href="/pump/on" class="button">TURN ON</a>
                     {% endif %}
             </h3>
         </div>
@@ -73,7 +70,7 @@ p   {color: #F5F5F5;}
                   <script>
                   var gauge4 = new JustGage({
                     id: "gauge4",
-                    value: 2, <!-- {{temperature}},-->
+                    value: {{temperature}},
                     levelColors: ['#EC7063', '#F4D03F', '#58D68D'],
                     symbol: '\u2103',
                     min: 0,
@@ -90,7 +87,7 @@ p   {color: #F5F5F5;}
             <script>
             var gauge5 = new JustGage({
               id: "gauge5",
-              value: 98, <!-- {{humidity}},-->
+              value: {{humidity}},
               symbol: "%",
               min: 0,
               decimals: 2,
@@ -104,5 +101,8 @@ p   {color: #F5F5F5;}
         <div>
   </div>
 
+<p>@2020 Developed by Gonçalo Calvinho</p>
+
 </body>
   </html>
+

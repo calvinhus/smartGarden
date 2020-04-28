@@ -11,32 +11,36 @@ spi = spidev.SpiDev()
 spi.open(0,0)
 spi.max_speed_hz=1000000
 
-DHT22_sensor = Adafruit_DHT.DHT22
-
-pin = 4 #DHT22 data pin on the raspberry pi
-
 # GPIO pins setup
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
+
+# Create sensor object
+DHT_sensor = Adafruit_DHT.DHT11
+dht_pin = 16 # data pin on the raspberry pi
+
+# global variables
+humidity = 0
+temperature = 0
 
 # Define sensor channels
 light_channel = 0
 temp_channel  = 1
 
-#define water pump GPIO | using a LED for testing purposes
-led = 23
+# Water pump GPIO
+pump = 23
 #initialize water pump status
-ledSts = 0
+pumpSts = 0
 # define as output and turn off
-GPIO.setup(led, GPIO.OUT)
-GPIO.output(led, GPIO.LOW)
+GPIO.setup(pump, GPIO.OUT)
+GPIO.output(pump, GPIO.LOW)
 
 def ReadChannel(channel):
   adc = spi.xfer2([1,(8+channel)<<4,0])
   data = ((adc[1]&3) << 8) + adc[2]
   return data
 
-def ConvertTemp(data,places):
+def ConvertTemp(data):
 
   # ADC Value
   # (approx)  Temp  Volts
@@ -50,7 +54,7 @@ def ConvertTemp(data,places):
   # 1023      280    3.30
 
   temp = ((data * 330)/float(1023))-50
-  temp = round(temp,places)
+  temp = round(temp,2)
   return temp
 
 
@@ -59,37 +63,40 @@ app = Flask(__name__)
 @app.route('/') # this tells the program what url triggers the function when a request is made
 def index():
 
+    global temperature, humidity
+
     try: #check to see if the DHT sensor is connected
-        humidity, temperature = Adafruit_DHT.read(DHT22_sensor, pin) #get the values from the sensor
-        humidity ='{:.2f}'.format(humidity) #convert value to two decimal places
-        temperature ='{:.1f}'.format(temperature) #convert value to one decimal place
-        print(temperature)
-        print("somethig")
-    except: # If the sensor is not connected send null values
+        humidity, temperature = Adafruit_DHT.read_retry(DHT_sensor, dht_pin) #get the values from the sensor
+        if humidity is not None and temperature is not None:
+            tVal = '{:.1f}'.format(temperature)
+            hVal = '{:.1f}'.format(humidity)
+        humidity ='{:.1f}'.format(humidity)         #convert value to one decimal place
+        temperature ='{:.1f}'.format(temperature)   #convert value to one decimal place
+    except: # If the sensor is not connected send null  values
         humidity = 0
         temperature = 0
         pass
 
     try:
-          # Read the light sensor data
-          light_level = ReadChannel(light_channel)
+        # Read the light sensor data
+        light_level = ReadChannel(light_channel)
     except: # If the sensor is not connected send null values
         light_level = 0
         pass
 
     try:
-         # Read the temperature sensor data
-         temp_level = ReadChannel(temp_channel)
-         temp = ConvertTemp(temp_level,2)
+        # Read the temperature sensor data
+        temp_level = ReadChannel(temp_channel)
+        temp = ConvertTemp(temp_level)
     except:
         temp = 0
         pass
 
     try:
         # Read water pump status
-        ledSts = GPIO.input(led)
+        pumpSts = GPIO.input(pump)
     except:
-        ledSts = 0
+        pumpSts = 0
         pass
 
 
@@ -99,25 +106,25 @@ def index():
             'humidity' : humidity,
             'temperature' : temperature,
             'light' : light_level,
-            'temp' : temp,
-            'led': ledSts
+            'temp' : temp
+#            'pump': pumpSts
     }
     return render_template('index.html', **templateData) #when a html request has been made return these values
 
 @app.route("/<deviceName>/<action>")
 def action(deviceName, action):
-        #if deviceName == 'led':
-        #        actuator = led
 
         if action == "on":
-                GPIO.output(led, GPIO.HIGH)
+                GPIO.output(pump, GPIO.HIGH)
         if action == "off":
-                GPIO.output(led, GPIO.LOW)
+                GPIO.output(pump, GPIO.LOW)
 
-        ledSts = GPIO.input(led)
+        pumpSts = GPIO.input(pump)
 
         templateData = {
-              'led'  : ledSts
+              'temperature': temperature,
+              'humidity': humidity,
+              'pump'  : pumpSts
         }
         return render_template('index.html', **templateData)
 

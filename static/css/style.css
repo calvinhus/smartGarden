@@ -1,3 +1,9 @@
+body {background-color: #778899;}
+
+h1  {color: #3CB371;}
+
+p   {color: #F5F5F5;}
+
 #wrapper {
     width: 100%;
     float: left;
@@ -25,18 +31,18 @@
          border: 1px solid #ccc;
          margin: 5px;
      }
-    
-     #pijuice {
-     width: 100%;
-     float: left;
-     clear: left;
-/*   margin-top: 50px; */
-     }
 
 .button {
-  background-color: red;
-  border: 2px solid #4682B4;
-  color: yellow;
-  text-align: right;
+  background-color: #87CEFA;
+  border: none;
+  color: white;
+  padding: 15px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 15px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 8px;
 }
 
