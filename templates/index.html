@@ -1,5 +1,5 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="refresh" content="30">
+<meta http-equiv="refresh" content="5">
 
 <script src="{{url_for('static', filename='javascript/justgage.js')}}"></script>
 <script src="{{url_for('static', filename='javascript/raphael-2.1.4.min.js')}}"></script>
@@ -8,6 +8,8 @@
 
 <!--<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/style.css')}}">-->
 <link rel="stylesheet" href="../static/css/style.css/">
+
+ <title> Horta 2.0 </title>
 
 <style>
 body {background-color: #778899;}
@@ -19,14 +21,14 @@ p   {color: #F5F5F5;}
 
   <body>
 
-    <h1 style="margin-left: 220px; margin-top: 50px"> Smart Garden </h1>
+    <h1 style="margin-left: 220px; margin-top: 50px"> Horta 2.0 </h1>
 <div id="wrapper">
         <div>
-            <h3> Bomba água :  {{ pump  }}  =>
+            <h3> Bomba água
                     {% if  pump   == 1 %}
-                            <a href="/pump/off"class="button">TURN OFF</a>
+                            <a href="/pump/off"class="button">Desligar</a>
                     {% else %}
-                            <a href="/pump/on" class="button">TURN ON</a>
+                            <a href="/pump/on" class="button">Ligar</a>
                     {% endif %}
             </h3>
         </div>
@@ -41,7 +43,7 @@ p   {color: #F5F5F5;}
           min: 0,
           decimals: 1,
           max: 1024,
-          title: "Light Sensor"
+          title: "Luminosidade"
         });
       </script>
       </div>
@@ -56,7 +58,7 @@ p   {color: #F5F5F5;}
           min: 0,
           decimals: 0,
           max: 30,
-          title: "TMP36"
+          title: "Pressão"
         });
       </script>
       </div>
@@ -76,7 +78,7 @@ p   {color: #F5F5F5;}
                     min: 0,
                     decimals: 1,
                     max: 50,
-                    title: "Temperature"
+                    title: "Temperatura"
                   });
                 </script>
                 </div>
@@ -92,7 +94,7 @@ p   {color: #F5F5F5;}
               min: 0,
               decimals: 2,
               max: 100,
-              title: "Humidity"
+              title: "Humidade"
             });
           </script>
           </div>
