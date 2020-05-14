@@ -4,33 +4,29 @@ h1  {color: #3CB371;}
 
 p   {color: #F5F5F5;}
 
-#wrapper {
-    width: 100%;
-    float: left;
-    clear: left;
-/*  margin-top: 50px; */
-    }
+#wrapper, #bme280 {
+  width: 100%;
+  float: left;
+  clear: left;
+}
+
+.block {
+  width: auto;
+  align-content: center;
+  display: inline-block;
+}
     
-    .block {
-    width: auto;
-    align-content: center;
-    display: inline-block;
-    }
-    
-    #dht22 {
-    width: 100%;
-    float: left;
-    clear: left;
-/*  margin-top: 50px; */
-    }
-    
-    .gauge {
-         width: auto;
-         height: 300px;
-         display: inline-block;
-         border: 1px solid #ccc;
-         margin: 5px;
-     }
+.gauge {
+  width: auto;
+  height: 300px;
+  display: inline-block;
+  border: 1px solid #ccc;
+  margin: 5px;
+}
+
+#gauge5 > svg:nth-child(1) > text:nth-child(6) {
+  font-size:28px !important;
+}
 
 .button {
   background-color: #87CEFA;
@@ -46,3 +42,13 @@ p   {color: #F5F5F5;}
   border-radius: 8px;
 }
 
+.grid-container {
+  display: inline-grid;
+  grid-template-columns: auto auto auto auto;
+  background-color: #778899;
+}
+/*
+.grid-container > div {
+  text-align: center;
+}
+*/
