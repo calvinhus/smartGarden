@@ -5,6 +5,7 @@ import time
 import spidev
 import RPi.GPIO as GPIO
 from flask import Flask, render_template, request
+import IPMA
 
 # Open SPI bus
 spi = spidev.SpiDev()
@@ -34,6 +35,7 @@ pumpSts = 0
 # define as output and turn off
 GPIO.setup(pump, GPIO.OUT)
 GPIO.output(pump, GPIO.LOW)
+
 
 def ReadChannel(channel):
   adc = spi.xfer2([1,(8+channel)<<4,0])
@@ -106,8 +108,8 @@ def index():
             'humidity' : humidity,
             'temperature' : temperature,
             'light' : light_level,
-            'temp' : temp
-#            'pump': pumpSts
+            'temp' : temp,
+            'pump': pumpSts
     }
     return render_template('index.html', **templateData) #when a html request has been made return these values
 
@@ -132,4 +134,3 @@ def action(deviceName, action):
 if __name__ == '__main__':
         app.jinja_env.cache = {}
         app.run(debug=True, host='0.0.0.0', port=5000, threaded=True)
-
